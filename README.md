@@ -28,3 +28,24 @@ mentorust auth -u 用户名 -p 密码
 ```rust
 mentorust auth -u 用户名 -p 密码 -b
 ```
+
+## 安装依赖
+
+### Windows
+
+1. 安装 [Npcap](https://npcap.com/#download)
+2. 安装界面勾选（`Support 802.11 traffic`）和（`Install Npcap in WinPcap API-compatable Mode`）
+
+### Linux
+
+需要安装libpcap库，例如：
+
+- Debian: 安装 `libpcap-dev`
+- Fedora: 安装 `libpcap-devel`
+
+**注意:** 如果不是以**root**权限运行, 你需要像这样设置环境: `sudo setcap cap_net_raw,cap_net_admin=eip path/to/bin`。
+
+### Mac OS X
+
+`libpcap` 需要被安装到Mac OS X。
+
