@@ -260,6 +260,9 @@ impl<T: Activated + ?Sized> Capture<T> {
     pub fn filter(&mut self, program: &str, optimize: bool) -> Result<(), Error> {
         let mut bpf_program = self.compile(program, optimize)?;
         let ret = unsafe { raw::pcap_setfilter(self.handle.as_ptr(), &mut bpf_program.0) };
+        //unsafe {
+        //    raw::pcap_freecode(&mut bpf_program.0);
+        //}
         self.check_err(ret != -1)
     }
 
