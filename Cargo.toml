@@ -1,0 +1,7 @@
+[package]
+name = "mentorust"
+version = "0.1.0"
+authors = ["fuqiuluo"]
+edition = "2021"
+
+[dependencies]
