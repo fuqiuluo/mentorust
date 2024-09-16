@@ -17,3 +17,14 @@
 | EAPOL_HDD_SER         | 磁盘序列号                                              | Static:AB45A862 |
 | MENTORUST_MAX_RETRIES | 最大重试次数，超过此次数认证失败，0表示无限重试                           | 3               |
 
+# 帮助
+
+```rust
+mentorust auth -u 用户名 -p 密码
+```
+
+如果是Windows平台可以通过附加`-b`参数后台运行。
+
+```rust
+mentorust auth -u 用户名 -p 密码 -b
+```
