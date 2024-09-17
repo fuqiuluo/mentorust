@@ -14,6 +14,8 @@ use windows::Win32::Foundation::{BOOL};
 use windows::Win32::System::Threading::{PROCESS_INFORMATION, STARTUPINFOA, CREATE_NO_WINDOW, CreateProcessA};
 #[cfg(target_os = "windows")]
 use windows::core::PSTR;
+#[cfg(target_os = "windows")]
+use windows::Win32::System::Threading::CREATE_NEW_CONSOLE;
 
 use std::cell::UnsafeCell;
 use std::ffi::CString;
@@ -30,7 +32,6 @@ use encoding_rs::GBK;
 use log::{debug, error, info, warn};
 use pcap::{Active, Capture, Device, State};
 use pnet::datalink::NetworkInterface;
-use windows::Win32::System::Threading::CREATE_NEW_CONSOLE;
 use crate::args::{EapArgs, EapCommands};
 use crate::eap::{Status, CODE_FAILURE, CODE_REQUEST, CODE_SUCCESS, EAP_TYPE_IDENTITY, EAP_TYPE_MD5_CHALLENGE};
 use crate::err::EapError;
