@@ -17,6 +17,7 @@
 | EAPOL_HDD_SER         | 磁盘序列号                                              | Static:AB45A862    |
 | MENTORUST_MAX_RETRIES | 最大重试次数，超过此次数认证失败，0表示无限重试                           | 3                  |
 | MENTORUST_OUT_FILE    | Linux平台后台运行时的输出文件                                  | /tmp/mentorust.out |
+| MENTORUST_PID_FILE    | Linux平台后台运行时的PID文件                                 | /tmp/mentorust.pid |
 
 # 帮助
 

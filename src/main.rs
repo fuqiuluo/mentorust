@@ -88,7 +88,7 @@ fn no_console_run(
 ) {
     let out_file = std::env::var("MENTORUST_OUT_FILE")
         .unwrap_or("/tmp/mentorust.out".to_string());
-    let pid_file = std::env::var("MENTORUST_OUT_FILE")
+    let pid_file = std::env::var("MENTORUST_PID_FILE")
         .unwrap_or("/tmp/mentorust.pid".to_string());
 
     let stdout = File::create(out_file).unwrap();
