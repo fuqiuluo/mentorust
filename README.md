@@ -9,13 +9,14 @@
 
 # 运行时环境变量
 
-| 变量名                   | 说明                                                 | 默认值             |
-|-----------------------|----------------------------------------------------|-----------------|
-| RUST_LOG              | 日志级别，可选值：`trace`, `debug`, `info`, `warn`, `error` | info            |
-| EAPOL_ENABLE_DHCP     | 是否启用DHCP，可选值：`1`, `0`                              | 1               |
-| EAPOL_SERVICE         | 认证服务                                               | network         |
-| EAPOL_HDD_SER         | 磁盘序列号                                              | Static:AB45A862 |
-| MENTORUST_MAX_RETRIES | 最大重试次数，超过此次数认证失败，0表示无限重试                           | 3               |
+| 变量名                   | 说明                                                 | 默认值                |
+|-----------------------|----------------------------------------------------|--------------------|
+| RUST_LOG              | 日志级别，可选值：`trace`, `debug`, `info`, `warn`, `error` | info               |
+| EAPOL_ENABLE_DHCP     | 是否启用DHCP，可选值：`1`, `0`                              | 1                  |
+| EAPOL_SERVICE         | 认证服务                                               | network            |
+| EAPOL_HDD_SER         | 磁盘序列号                                              | Static:AB45A862    |
+| MENTORUST_MAX_RETRIES | 最大重试次数，超过此次数认证失败，0表示无限重试                           | 3                  |
+| MENTORUST_OUT_FILE    | Linux平台后台运行时的输出文件                                  | /tmp/mentorust.out |
 
 # 帮助
 

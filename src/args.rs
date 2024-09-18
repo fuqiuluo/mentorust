@@ -31,6 +31,10 @@ pub enum EapCommands {
         /// 是否后台运行
         #[arg(short, long, default_value_t = false)]
         background: bool,
+
+        /// 反共享检测等级 0（关闭） 1（低） 2（中） 3（高）
+        #[arg(short, long, default_value_t = 0)]
+        anti_share: u8,
     },
     /// 解码配置文件
     DecodeConfig {

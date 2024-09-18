@@ -17,6 +17,9 @@ use windows::core::PSTR;
 #[cfg(target_os = "windows")]
 use windows::Win32::System::Threading::CREATE_NEW_CONSOLE;
 
+#[cfg(target_os = "linux")]
+use daemonize::Daemonize;
+
 use std::cell::UnsafeCell;
 use std::ffi::CString;
 use std::fmt::format;
@@ -26,6 +29,7 @@ use std::ptr::{null, null_mut};
 use std::sync::Arc;
 use std::sync::mpsc::{RecvError, RecvTimeoutError};
 use std::{ptr, thread};
+use std::fs::File;
 use std::time::Duration;
 use clap::Parser;
 use encoding_rs::GBK;
@@ -44,14 +48,19 @@ fn main() {
     let args = EapArgs::parse();
 
     match args.command {
-        EapCommands::Auth { nic, username, password, dhcp_mode, background } => {
+        EapCommands::Auth { nic, username, password, dhcp_mode, background, anti_share } => {
+            if cfg!(target_os = "linux") {
+                if unsafe { libc::geteuid() } != 0 {
+                    error!("请使用root权限运行！");
+                    exit(-4);
+                }
+            }
+
             if background {
                 #[cfg(target_os = "windows")]
                 no_windows_run(nic, username, password, dhcp_mode);
-                #[cfg(target_os = "linux")] {
-                    error!("后台运行仅支持Windows系统！Linux系统方案多样，请自行选择...");
-                    exit(-3);
-                }
+                #[cfg(target_os = "linux")]
+                no_console_run(nic, username, password, dhcp_mode);
             } else {
                 //thread::sleep(Duration::from_secs(5));
                 auth(nic, username, password, dhcp_mode);
@@ -67,6 +76,42 @@ fn main() {
         EapCommands::PrintMac => {
             net::print_all_network_mac();
         }
+    }
+}
+
+#[cfg(target_os = "linux")]
+fn no_console_run(
+    nic_name: String,
+    username: String,
+    password: String,
+    dhcp_mode: u8
+) {
+    let out_file = std::env::var("MENTORUST_OUT_FILE")
+        .unwrap_or("/tmp/mentorust.out".to_string());
+    let pid_file = std::env::var("MENTORUST_OUT_FILE")
+        .unwrap_or("/tmp/mentorust.pid".to_string());
+
+    let stdout = File::create(out_file).unwrap();
+    let stderr = stdout.try_clone().unwrap();
+
+    // working_directory fetch
+    let current_direction = std::env::current_dir().unwrap();
+
+    let daemonize = Daemonize::new()
+        .pid_file(pid_file)
+        .chown_pid_file(true)
+        .working_directory(current_direction)
+        .umask(0o777)
+        .stdout(stdout)
+        .stderr(stderr)
+        .privileged_action(|| "Executed before drop privileges");
+
+    match daemonize.start() {
+        Ok(_) => {
+            info!("程序将作为系统守护进程切换到后台运行");
+            auth(nic_name, username, password, dhcp_mode);
+        },
+        Err(e) => error!("后台运行失败, {}", e),
     }
 }
 
