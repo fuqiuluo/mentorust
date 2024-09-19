@@ -49,6 +49,7 @@ fn main() {
 
     match args.command {
         EapCommands::Auth { nic, username, password, dhcp_mode, background, anti_share } => {
+            #[cfg(target_os = "linux")]
             if cfg!(target_os = "linux") {
                 if unsafe { libc::geteuid() } != 0 {
                     error!("请使用root权限运行！");
