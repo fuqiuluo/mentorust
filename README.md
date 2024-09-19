@@ -31,12 +31,13 @@ mentorust auth -u 用户名 -p 密码
 mentorust auth -u 用户名 -p 密码 -b
 ```
 
-## 安装依赖
+## 安装依赖（构建）
 
 ### Windows
 
 1. 安装 [Npcap](https://npcap.com/#download)
 2. 安装界面勾选（`Support 802.11 traffic`）和（`Install Npcap in WinPcap API-compatable Mode`）
+3. （可选）开发者需要设置环境变量`LIB`内容为Npcap SDK的`LIB64`或者`LIB`
 
 ### Linux
 
@@ -51,3 +52,8 @@ mentorust auth -u 用户名 -p 密码 -b
 
 `libpcap` 需要被安装到Mac OS X。
 
+# TODO
+
+- [ ] 反校园网共享检测支持
+- [ ] 提供GUI界面
+- [ ] 支持v3/v4算法
