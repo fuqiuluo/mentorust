@@ -32,6 +32,7 @@ use std::{ptr, thread};
 use std::fs::File;
 use std::time::Duration;
 use clap::Parser;
+use daemonize::Daemonize;
 use encoding_rs::GBK;
 use log::{debug, error, info, warn};
 use pcap::{Active, Capture, Device, State};
@@ -62,6 +63,8 @@ fn main() {
                 no_windows_run(nic, username, password, dhcp_mode);
                 #[cfg(target_os = "linux")]
                 no_console_run(nic, username, password, dhcp_mode);
+                #[cfg(target_os = "macos")]
+                no_macos_run(nic, username, password, dhcp_mode);
             } else {
                 //thread::sleep(Duration::from_secs(5));
                 auth(nic, username, password, dhcp_mode);
@@ -157,6 +160,42 @@ fn no_windows_run(
         }
     }
 }
+
+#[cfg(target_os = "macos")]
+fn no_macos_run(
+    nic_name: String,
+    username: String,
+    password: String,
+    dhcp_mode: u8
+){
+    let out_file = std::env::var("MENTORUST_OUT_FILE")
+        .unwrap_or("/tmp/mentorust.out".to_string());
+    let pid_file = std::env::var("MENTORUST_PID_FILE")
+        .unwrap_or("/tmp/mentorust.pid".to_string());
+
+    let stdout = File::create(&out_file).unwrap();
+    let stderr = stdout.try_clone().unwrap();
+
+    let current_direction = std::env::current_dir().unwrap();
+
+    let daemonize = Daemonize::new()
+        .pid_file(pid_file)
+        .chown_pid_file(true)
+        .working_directory(current_direction)
+        .umask(0o777)
+        .stdout(stdout)
+        .stderr(stderr)
+        .privileged_action(|| "Executed before drop privileges");
+
+    match daemonize.start() {
+        Ok(_) => {
+            info!("程序已在 macOS 上作为守护进程运行");
+            auth(nic_name, username, password, dhcp_mode);
+        }
+        Err(e) => error!("macOS 后台运行失败: {}", e),
+    }
+}
+
 
 fn auth(
     nic_name: String,
