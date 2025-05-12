@@ -1,0 +1,14 @@
+[build]
+target = "aarch64-unknown-linux-musl"
+
+[target.aarch64-unknown-linux-musl]
+linker = "/opt/homebrew/bin/aarch64-unknown-linux-musl-gcc"
+ar = "/opt/homebrew/bin/aarch64-unknown-linux-musl-ar"
+rustflags = [
+    "-L", "/Users/starrykira/libpcap-1.10.4",
+    "-lpcap",
+]
+
+[unstable]
+build-std = ["std", "panic_abort"]
+build-std-features = ["panic_immediate_abort"]

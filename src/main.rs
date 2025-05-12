@@ -18,7 +18,6 @@ use windows::core::PSTR;
 use windows::Win32::System::Threading::CREATE_NEW_CONSOLE;
 
 #[cfg(target_os = "linux")]
-use daemonize::Daemonize;
 
 use std::cell::UnsafeCell;
 use std::ffi::CString;
